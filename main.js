@@ -9,6 +9,9 @@ var leftWrist_Y=0;
 var rightWrist_X=0;
 var rightWrist_Y=0;
 
+var scoreLeftWrist=0;
+var scoreRightWrist=0;
+
 function preload(){
     song_1=loadSound("Song_1.mp3");
     song_2=loadSound("Song_2.mp3");
@@ -40,12 +43,26 @@ function gotPoses(results){
         rightWrist_Y=results[0].pose.rightWrist.y;
         console.log("RightWrist X = "+rightWrist_X+"RightWrist Y = "+rightWrist_Y);
 
-        
+        scoreLeftWrist=results[0].pose.keypoints[9].score;
+        console.log("ScoreLeftWrist = "+scoreLeftWrist);
     }
 }
 
 function draw(){
     image(video,0,0,600,500);
+
+    fill("#ff0000");
+    stroke("#ff0000");
+    var left_status=song_1.isPlaying();
+
+    if(scoreLeftWrist > 0.2){
+        circle(leftWrist_X,leftWrist_Y,20);
+        song_2.stop();
+        if(left_status==false){
+          song_1.play();
+          document.getElementById("song_name").innerHTML="Namo Namo Song";
+        }
+    }
 }
 function play(){
     song_1.play();
