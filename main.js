@@ -44,6 +44,7 @@ function gotPoses(results){
         console.log("RightWrist X = "+rightWrist_X+"RightWrist Y = "+rightWrist_Y);
 
         scoreLeftWrist=results[0].pose.keypoints[9].score;
+        scoreRightWrist=results[0].pose.keypoints[9].score;
         console.log("ScoreLeftWrist = "+scoreLeftWrist);
     }
 }
@@ -54,7 +55,16 @@ function draw(){
     fill("#ff0000");
     stroke("#ff0000");
     var left_status=song_1.isPlaying();
+    var right_status=song_2.isPlaying();
 
+    if(scoreRightWrist > 0.2){
+        circle(rightWrist_X,rightWrist_Y,20);
+        song_1.stop();
+        if(right_status==false){
+          song_2.play();
+          document.getElementById("song_name").innerHTML="Meri Maa Song";
+        }
+    }
     if(scoreLeftWrist > 0.2){
         circle(leftWrist_X,leftWrist_Y,20);
         song_2.stop();
@@ -63,12 +73,4 @@ function draw(){
           document.getElementById("song_name").innerHTML="Namo Namo Song";
         }
     }
-}
-function play(){
-    song_1.play();
-    song_2.play();
-    song_1.setVolume(1);
-    song_1.rate(1);
-    song_2.setVolume(1);
-    song_2.rate(1);
 }
